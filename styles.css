@@ -1,0 +1,191 @@
+/* Apply box sizing to all elements */
+* {
+    box-sizing: border-box;
+}
+
+/* Main webpage design */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f2f5f9;
+    color: #222;
+}
+
+/* Header design */
+header {
+    background: #123b32;
+    color: white;
+    padding: 22px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0 0 8px;
+}
+
+header p {
+    margin-bottom: 0;
+}
+
+/* Main container */
+.container {
+    max-width: 1100px;
+    margin: 25px auto;
+    padding: 15px;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 22px;
+}
+
+/* Products and bill panels */
+.panel {
+    background: white;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px #0001;
+}
+
+/* Section headings */
+h2 {
+    color: #123b32;
+    margin-top: 0;
+}
+
+/* Input fields and dropdown */
+input,
+select,
+button {
+    padding: 11px;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+input,
+select {
+    border: 1px solid #ccc;
+    width: 100%;
+    margin: 7px 0 12px;
+}
+
+/* Product card */
+.product {
+    border: 1px solid #e1e5e8;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Button design */
+button {
+    border: none;
+    background: #147d58;
+    color: white;
+    cursor: pointer;
+}
+
+/* Button hover effect */
+button:hover {
+    background: #0d6244;
+}
+
+.product button {
+    white-space: nowrap;
+}
+
+/* Remove button */
+.remove {
+    background: #d93636;
+    padding: 6px 10px;
+    margin-left: 8px;
+}
+
+/* Cart item design */
+.bill-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #eee;
+    padding: 12px 0;
+}
+
+/* Quantity input */
+.qty {
+    width: 72px;
+    padding: 6px;
+    margin: 0;
+}
+
+/* Bill total section */
+.total {
+    border-top: 2px solid #123b32;
+    margin-top: 15px;
+    padding-top: 12px;
+    line-height: 2;
+}
+
+/* Grand total */
+.grand-total {
+    font-size: 22px;
+    font-weight: bold;
+    color: #147d58;
+}
+
+/* Action buttons */
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.actions button {
+    flex: 1;
+}
+
+/* Clear button */
+.clear {
+    background: #555;
+}
+
+/* Empty cart message */
+.empty {
+    color: #777;
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* Status message */
+#message {
+    color: #147d58;
+    font-size: 14px;
+}
+
+/* Footer design */
+footer {
+    text-align: center;
+    color: #66736c;
+    font-size: 13px;
+    padding: 15px;
+}
+
+/* Responsive design for mobile screens */
+@media (max-width: 700px) {
+
+    .container {
+        grid-template-columns: 1fr;
+        margin-top: 10px;
+    }
+
+    .panel {
+        padding: 17px;
+    }
+
+    .bill-item {
+        flex-wrap: wrap;
+    }
+
+}

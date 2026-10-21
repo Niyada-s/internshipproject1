@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Daymart Supermarket Billing System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f5;
+            color: #333;
+        }
+
+        header {
+            background: #123c2e;
+            color: white;
+            text-align: center;
+            padding: 22px;
+        }
+
+        header h1 {
+            margin: 0 0 8px;
+        }
+
+        header p {
+            margin: 0;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            max-width: 1200px;
+            margin: 25px auto;
+            padding: 0 20px;
+            align-items: start;
+        }
+
+        .panel {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px #ddd;
+            min-width: 0;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background: #159957;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #107744;
+        }
+
+        .product {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 5px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .product-info {
+            line-height: 1.6;
+        }
+
+        .product-info strong {
+            display: block;
+        }
+
+        .product-price {
+            color: #555;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-details {
+            flex: 1;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .quantity-controls button {
+            padding: 5px 10px;
+        }
+
+        .remove-button {
+            background: #c0392b;
+            padding: 6px 10px;
+        }
+
+        .total {
+            border-top: 1px solid #ddd;
+            margin-top: 20px;
+            padding-top: 15px;
+            line-height: 2;
+        }
+
+        .grand-total {
+            font-size: 22px;
+            font-weight: bold;
+            color: #123c2e;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .actions button {
+            flex: 1;
+        }
+
+        .clear {
+            background: #343a40;
+        }
+
+        #message {
+            color: #123c2e;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            background: #123c2e;
+            color: white;
+            padding: 15px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 750px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 0 12px;
+            }
+
+            .panel {
+                padding: 18px;
+            }
+
+            header h1 {
+                font-size: 23px;
+            }
+        }
+
+        @media print {
+            header,
+            footer,
+            .products-panel,
+            .actions,
+            #message,
+            .payment-section {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+            }
+
+            .container {
+                display: block;
+                margin: 0;
+                padding: 0;
+            }
+
+            .panel {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>DAYMART SUPERMARKET</h1>
+        <p>Billing &amp; Point of Sale System</p>
+    </header>
+
+    <main class="container">
+
+        <!-- PRODUCTS TABLE -->
+        <section class="panel products-panel">
+
+            <h2>🛒 Products</h2>
+
+            <div id="products">
+
+                <div class="product" data-id="1" data-name="Rice (1 kg)" data-price="60">
+                    <div class="product-info">
+                        <strong>Rice (1 kg)</strong>
+                        <span class="product-price">₹60.00</span>
+                    </div>
+                    <button type="button" class="add-button">Add</button>
+                </div>
+
+                <div class="product" data-id="2" data-name="Milk (1 L)" data-price="30">
+                    <div class="product-info">
+                        <strong>Milk (1 L)</strong>
+                        <span class="product-price">₹30.00</span>
+                    </div>
+                    <button type="button" class="add-button">Add</button>
+                </div>
+
+                <div class="product" data-id="3" data-name="Bread" data-price="40">
+                    <div class="product-info">
+                        <strong>Bread</strong>
+                        <span class="product-price">₹40.00</span>
+                    </div>
+                    <button type="button" class="add-button">Add</button>
+                </div>
+
+                <div class="product" data-id="4" data-name="Sugar (1 kg)" data-price="45">
+                    <div class="product-info">
+                        <strong>Sugar (1 kg)</strong>
+                        <span class="product-price">₹45.00</span>
+                    </div>
+                    <button type="button" class="add-button">Add</button>
+                </div>
+
+                <div class="product" data-id="5" data-name="Cooking Oil (1 L)" data-price="140">
+                    <div class="product-info">
+                        <strong>Cooking Oil (1 L)</strong>
+                        <span class="product-price">₹140.00</span>
+                    </div>
+                    <button type="button" class="add-button">Add</button>
+                </div>
+
+                <div class="product" data-id="6" data-name="Biscuits" data-price="20">
+                    <div class="product-info">
+                        <strong>Biscuits</strong>
+                        <span class="product-price">₹20.00</span>
+                    </div>
+                    <button type="button" class="add-button">Add</button>
+                </div>
+
+                <div class="product" data-id="7" data-name="Eggs (6 pcs)" data-price="42">
+                    <div class="product-info">
+                        <strong>Eggs (6 pcs)</strong>
+                        <span class="product-price">₹42.00</span>
+                    </div>
+                    <button type="button" class="add-button">Add</button>
+                </div>
+
+                <div class="product" data-id="8" data-name="Soap" data-price="35">
+                    <div class="product-info">
+                        <strong>Soap</strong>
+                        <span class="product-price">₹35.00</span>
+                    </div>
+                    <button type="button" class="add-button">Add</button>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- CUSTOMER BILL -->
+        <section class="panel">
+
+            <h2>🧾 Customer Bill</h2>
+
+            <label for="customer">Customer Name</label>
+            <input
+                type="text"
+                id="customer"
+                placeholder="Enter customer name"
+            >
+
+            <div id="cart">
+                <p>No products added yet.</p>
+            </div>
+
+            <div class="total">
+
+                <div>
+                    Subtotal: ₹<span id="subtotal">0.00</span>
+                </div>
+
+                <div>
+                    GST (5%): ₹<span id="gst">0.00</span>
+                </div>
+
+                <div class="grand-total">
+                    Total: ₹<span id="total">0.00</span>
+                </div>
+
+            </div>
+
+            <div class="payment-section">
+
+                <label for="payment">Payment Method</label>
+
+                <select id="payment">
+                    <option value="Cash">Cash</option>
+                    <option value="UPI">UPI</option>
+                    <option value="Card">Card</option>
+                </select>
+
+            </div>
+
+            <div class="actions">
+
+                <button type="button" id="generate-bill">
+                    Generate Bill
+                </button>
+
+                <button type="button" id="clear-cart" class="clear">
+                    Clear
+                </button>
+
+            </div>
+
+            <p id="message" role="status" aria-live="polite"></p>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Daymart Supermarket | Billing System</p>
+    </footer>
+
+    <script>
+        // Store selected products here
+        let cart = [];
+
+        const productList = document.getElementById("products");
+        const cartContainer = document.getElementById("cart");
+        const message = document.getElementById("message");
+
+        // ADD BUTTON: Add the selected product to the customer bill
+        productList.addEventListener("click", function (event) {
+
+            const button = event.target.closest(".add-button");
+
+            if (!button) {
+                return;
+            }
+
+            const productElement = button.closest(".product");
+
+            const id = Number(productElement.dataset.id);
+            const name = productElement.dataset.name;
+            const price = Number(productElement.dataset.price);
+
+            // Check if the product is already in the bill
+            const existingProduct = cart.find(item => item.id === id);
+
+            if (existingProduct) {
+                existingProduct.quantity++;
+            } else {
+                cart.push({
+                    id: id,
+                    name: name,
+                    price: price,
+                    quantity: 1
+                });
+            }
+
+            message.textContent = name + " added to customer bill.";
+
+            // Refresh bill immediately
+            displayCart();
+        });
+
+        // DISPLAY CUSTOMER BILL
+        function displayCart() {
+
+            cartContainer.replaceChildren();
+
+            if (cart.length === 0) {
+                const emptyMessage = document.createElement("p");
+                emptyMessage.textContent = "No products added yet.";
+                cartContainer.appendChild(emptyMessage);
+            }
+
+            let subtotal = 0;
+
+            cart.forEach(function (item) {
+
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+
+                const row = document.createElement("div");
+                row.className = "cart-item";
+
+                const details = document.createElement("div");
+                details.className = "cart-details";
+
+                const name = document.createElement("strong");
+                name.textContent = item.name;
+
+                const amount = document.createElement("div");
+                amount.textContent =
+                    "₹" + item.price.toFixed(2) +
+                    " × " + item.quantity +
+                    " = ₹" + itemTotal.toFixed(2);
+
+                details.append(name, amount);
+
+                // Quantity controls
+                const controls = document.createElement("div");
+                controls.className = "quantity-controls";
+
+                const minus = document.createElement("button");
+                minus.type = "button";
+                minus.textContent = "−";
+
+                minus.addEventListener("click", function () {
+                    item.quantity--;
+
+                    if (item.quantity <= 0) {
+                        cart = cart.filter(product => product.id !== item.id);
+                    }
+
+                    displayCart();
+                });
+
+                const quantity = document.createElement("span");
+                quantity.textContent = item.quantity;
+
+                const plus = document.createElement("button");
+                plus.type = "button";
+                plus.textContent = "+";
+
+                plus.addEventListener("click", function () {
+                    item.quantity++;
+                    displayCart();
+                });
+
+                controls.append(minus, quantity, plus);
+
+                const remove = document.createElement("button");
+                remove.type = "button";
+                remove.textContent = "×";
+                remove.className = "remove-button";
+                remove.title = "Remove product";
+
+                remove.addEventListener("click", function () {
+                    cart = cart.filter(product => product.id !== item.id);
+                    displayCart();
+                });
+
+                row.append(details, controls, remove);
+                cartContainer.appendChild(row);
+            });
+
+            // Calculate subtotal, GST, and total
+            const gst = subtotal * 0.05;
+            const total = subtotal + gst;
+
+            document.getElementById("subtotal").textContent =
+                subtotal.toFixed(2);
+
+            document.getElementById("gst").textContent =
+                gst.toFixed(2);
+
+            document.getElementById("total").textContent =
+                total.toFixed(2);
+        }
+
+        // CLEAR THE CUSTOMER BILL
+        document.getElementById("clear-cart").addEventListener("click", function () {
+
+            cart = [];
+
+            document.getElementById("customer").value = "";
+            document.getElementById("payment").value = "Cash";
+
+            message.textContent = "Customer bill cleared.";
+
+            displayCart();
+        });
+
+        // GENERATE BILL
+        document.getElementById("generate-bill").addEventListener("click", function () {
+
+            const customer = document.getElementById("customer").value.trim();
+
+            if (customer === "") {
+                alert("Please enter the customer name.");
+                document.getElementById("customer").focus();
+                return;
+            }
+
+            if (cart.length === 0) {
+                alert("Please add products to the customer bill first.");
+                return;
+            }
+
+            const subtotal = cart.reduce(function (sum, item) {
+                return sum + item.price * item.quantity;
+            }, 0);
+
+            const gst = subtotal * 0.05;
+            const total = subtotal + gst;
+            const payment = document.getElementById("payment").value;
+
+            const receipt = window.open("", "_blank");
+
+            if (!receipt) {
+                alert("Please allow pop-ups to generate the bill.");
+                return;
+            }
+
+            const rows = cart.map(function (item) {
+                return `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.quantity}</td>
+                        <td>₹${item.price.toFixed(2)}</td>
+                        <td>₹${(item.price * item.quantity).toFixed(2)}</td>
+                    </tr>
+                `;
+            }).join("");
+
+            receipt.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Daymart Customer Bill</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            padding: 25px;
+                        }
+                        h1, h3, p {
+                            text-align: center;
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                        }
+                        th, td {
+                            border: 1px solid #ccc;
+                            padding: 10px;
+                            text-align: left;
+                        }
+                        .totals {
+                            text-align: right;
+                            line-height: 2;
+                            margin-top: 20px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>DAYMART SUPERMARKET</h1>
+                    <h3>Customer Bill</h3>
+
+                    <p>Customer: ${customer}</p>
+                    <p>Date: ${new Date().toLocaleString("en-IN")}</p>
+
+                    <table>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Amount</th>
+                        </tr>
+                        ${rows}
+                    </table>
+
+                    <div class="totals">
+                        <p>Subtotal: ₹${subtotal.toFixed(2)}</p>
+                        <p>GST (5%): ₹${gst.toFixed(2)}</p>
+                        <h2>Total: ₹${total.toFixed(2)}</h2>
+                        <p>Payment: ${payment}</p>
+                    </div>
+
+                    <p>Thank you for shopping with Daymart!</p>
+
+                    <script>
+                        function printBill() {
+                            window.print();
+                        }
+                    <\/script>
+
+                    <button onclick="printBill()">Print Bill</button>
+                </body>
+                </html>
+            `);
+
+            receipt.document.close();
+
+            message.textContent = "Bill generated successfully.";
+        });
+
+        // Initial bill display
+        displayCart();
+    </script>
+
+</body>
+</html>
